@@ -1,88 +1,85 @@
-# importing dependecies
 from bs4 import BeautifulSoup
 from pathlib import Path
 from datetime import datetime
 import requests, time , sys
 
-# intoduction
-print('--------------------Python General Webscraper--------------------')
+print('----------------------- General Webscraper ----------------------')
 print('Provide the inforamtion requested to extract data from a website.')
 print('-'*65)
-# user data
+
 while True:
-    url = input('Enter the URL address : ').strip()
-    tag = input('Enter the tag         : ').strip()
-    class_name = input('Enter the class\'s name: ').strip()
+    url_address = input('URL Adress           : ').strip()
+    html_tag    = input('HTML tag             : ').strip()
+    class_name  = input('The tag\'s class name : ').strip()
     print('='*65)
-    try:
-        web_page = requests.get(url).text
+    try: 
+        web_page = requests.get(url_address).text
     except:
         print('-'* 23 + ' Invalid URL Adress ' + '-'*22)
-        print(f'Did you ment "http://{url}"?')
+        print(f'Did you ment "http://{url_address}"?')
         print('Please, provide a valid URL adress.')
         print('='*65)
         continue
-    if len(tag) == 0:
+    if len(html_tag) == 0:
         print('-'* 24 + ' Invalid HTML tag ' + '-'*23)
         print('Please, provide a valid HTML tag.')
         continue
     break
-#parsing
+    
 bowl = BeautifulSoup(web_page, 'html.parser')
-#finding 
-x = ''
-o = 1
-def find_data():
-    global c
-    global x
-    global o
+scraped_data = ''
+indx = 1
+all_tags = ''
+def scrape_page():
+    global scraped_data
+    global indx
+    global all_tags
     if len(class_name) == 0:
-        for i in bowl.find_all(tag):
-            placeholder = i.text.replace('  ', '').replace('\n', '') 
-            x +=  f"{o}) {placeholder} " + '\n' +  '-' * 36 +'\n'
-            o+=1
-        print(f'{x}')
-        c = False
+        for item in bowl.find_all(html_tag):
+            filtered_item = item.text.replace('  ', '').replace('\n', '') 
+            scraped_data += f"{indx}) {filtered_item}" + '\n' + '-'* 65 + '\n'
+            indx += 1
+        print(found_data() if scraped_data else no_results())
+        all_tags = False
     else:
-        for i in bowl.find_all(tag, class_ = class_name):
-            placeholder = i.text.replace('  ', '').replace('\n', '') 
-            x +=  f"{o}) {placeholder} " + '\n' +  '-' * 36 +'\n'
-            o+=1
-        print(f'{x}')
-        c = True
-
-# asking 
-def asking():
-    if len(x) == 0:
-        print('No results where found')
+        for item in bowl.find_all(html_tag, class_ = class_name):
+            filtered_item = item.text.replace('  ', '').replace('\n', '') 
+            scraped_data += f"{indx}) {filtered_item}" + '\n' + '-'* 36 + '\n'
+            indx += 1
+        print(found_data() if scraped_data else no_results())
+        all_tags = True
+        
+def found_data():
+    print(scraped_data)
+    choice = input('Would you like to store this data? ("y"/"n"): ').strip().lower()
+    if choice == 'y':
+        store_data(all_tags)
     else:
-        choice = input('Would you like to store this data? ("y"/"n"): ').strip()
-        if choice == 'y':
-            store_data(c)
-        else:
-            print('Exiting in: 5 seconds')
-            time.sleep(5)
-            sys.exit()
-# def stroring 
-def store_data(c):
-    file_name = input('Enter a name for the file: ')
-    file_path = Path.home()/'desktop'/ file_name
+        terminate()
+def no_results():
+    print('No result found.')
+    terminate()
+    
+def store_data(present_class_name):
+    file_name = input("Enter the file's name: ").strip()
+    file_path = Path.home() / 'desktop' / file_name
     time_stamp = str(f'{datetime.now()}').split()
-    with open(file_path, 'a') as file:
-        #file.write(f'-'*36 + '\n')
+    
+    with open (file_path, 'a') as file:
         file.write(f'\nStored at: {time_stamp[0]} {time_stamp[1][:5]}\n')
-        file.write(f'*'*36 + '\n')
-        file.write(x)
+        file.write(f'From     : {url_address}\n')
+        file.write(f'*'*130 + '\n')
+        file.write(scraped_data)
     print('-'*50)
-    print(f'''Data stored succesfully
+    print(f'''Data store succesfully
 Location : Desktop
 File Name: "{file_name}.txt"''')
-    time.sleep(3)
-    close = input('Type enter to close:')
+    terminate()
+
+def terminate():
+    time.sleep(2)
+    print('. . . . . '* 8)
+    close = input('Type "ENTER" to terminate:')
     sys.exit()
 
-#indx = 0
-# maeke this in to a function
-
-find_data()
-asking()
+scrape_page()
