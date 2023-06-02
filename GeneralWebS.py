@@ -1,57 +1,77 @@
+# importing dependecies
 from bs4 import BeautifulSoup
 from pathlib import Path
-import requests, time, sys # importing the required modules
+from datetime import datetime
+import requests, time , sys
 
-print('''This is a multi-website web scraper.
-In other words, in order to search for the data you want,
-all you need to know is the url, the tags and the name of the class in the tag.
-Those can be fount be i simple research in the "Elements" of the page while pressing:
-Control-Shift-I simultaneously.
-''')
-# intorduction
+# intoduction
+print('--------------------Python General Webscraper--------------------')
+print('Provide the inforamtion requested to extract data from a website.')
+print('-'*65)
+while True:
+    url = input('Enter the URL address :').strip()
+    tag = input('Enter the tag         : ').strip()
+    class_name = input('Enter the class\'s name: ').strip()
+    print('='*65)
+    try:
+        web_page = requests.get(url).text
+    except:
+        print('Invalid url')
+        print('Please provide a valid URL')
+        continue
+    if len(tag) == 0:
+        print('Please provide a valid html tag')
+        continue
+    break
 
-def store_in_file(): # this is the function that stores the scraped data
-    print('-'*50)
+bowl = BeautifulSoup(web_page, 'html.parser')
+
+
+def store_data(c):
     file_name = input('Enter a name for the file: ')
     file_path = Path.home()/'desktop'/ file_name
+    time_stamp = str(f'{datetime.now()}').split()
     with open(file_path, 'a') as file:
-        for i in bowl.find_all(tag, class_= class_name):
-            file.write(f'{i.text.replace(" ","")} \n')
+        #file.write(f'-'*36 + '\n')
+        file.write(f'\nStored at: {time_stamp[0]} {time_stamp[1][:5]}\n')
+        file.write(f'*'*36 + '\n')
+        file.write(x)
     print('-'*50)
-    print(f'The data are stored in a txt file, named "{file_name}". On your Desktop!')
-    time.sleep(10)
-
-# the user inputs the requirements for the data they what...
-url = input('Enter the specific url: ').strip()
-tag = input('Enter a tag           : ').strip()
-class_name = input('Enter the class name  : ').strip()
-
-# the requests and bs4 modules take place
-web_page = requests.get(url).text
-bowl = BeautifulSoup(web_page, 'html.parser')
-print('-'*50)
-x=''
-indx = 0
-for i in bowl.find_all(tag, class_= class_name):
-    indx += 1
-    x = i.text
-    print(f"{indx}) {x.replace(' ', '')}")
-if len(x) == 0:
-    print('Sorry, no results where found.') #safety conditions
-    print('*'*50)
-    close = input('Typer enter to close: ')
+    print(f'''Data stored succesfully
+Location : Desktop
+File Name: "{file_name}.txt"''')
+    time.sleep(3)
+    close = input('Type enter to close:')
     sys.exit()
-if len(x) != 0: # if there is a result, the user gets asked if they what to store the data
-    print('='*50)
+
+#indx = 0
+# maeke this in to a function
+x = ''
+o = 1
+def poop(i):
+    global x
+    global o
+    placeholder = i.text.replace('  ', '').replace('\n', '') 
+    x +=  f"{o}) {placeholder} " + '\n' +  '-' * 36 +'\n'
+    o+=1
+def find_data():
+    if len(class_name) == 0:
+        for i in bowl.find_all(tag):
+            poop(i)
+        print(f'{x}')
+    else:
+        for i in bowl.find_all(tag, class_ = class_name):
+            poop(i)
+find_data()
+
+
+if len(x) == 0:
+    print('No results where found')
+else:
     choice = input('Would you like to store this data? ("y"/"n"): ').strip()
     if choice == 'y':
-        store_in_file() # if yes the call the respective function
-    if choice != 'y':
-        time.sleep(1)
-        print('-'*50)
-        print('Have a beautiful day.')
-        time.sleep(3)
+        store_data(c)
+    else:
+        print('Exiting in: 5 seconds')
+        time.sleep(5)
         sys.exit()
-
-
-
