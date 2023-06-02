@@ -10,21 +10,23 @@ print('Provide the inforamtion requested to extract data from a website.')
 print('-'*65)
 # user data
 while True:
-    url = input('Enter the URL address :').strip()
+    url = input('Enter the URL address : ').strip()
     tag = input('Enter the tag         : ').strip()
     class_name = input('Enter the class\'s name: ').strip()
     print('='*65)
     try:
         web_page = requests.get(url).text
     except:
-        print('Invalid url')
-        print('Please provide a valid URL')
+        print('-'* 23 + ' Invalid URL Adress ' + '-'*22)
+        print(f'Did you ment "http://{url}"?')
+        print('Please, provide a valid URL adress.')
+        print('='*65)
         continue
     if len(tag) == 0:
-        print('Please provide a valid html tag')
+        print('-'* 24 + ' Invalid HTML tag ' + '-'*23)
+        print('Please, provide a valid HTML tag.')
         continue
     break
-
 #parsing
 bowl = BeautifulSoup(web_page, 'html.parser')
 #finding 
