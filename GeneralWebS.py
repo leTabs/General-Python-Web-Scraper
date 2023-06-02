@@ -8,6 +8,7 @@ import requests, time , sys
 print('--------------------Python General Webscraper--------------------')
 print('Provide the inforamtion requested to extract data from a website.')
 print('-'*65)
+# user data
 while True:
     url = input('Enter the URL address :').strip()
     tag = input('Enter the tag         : ').strip()
@@ -24,9 +25,43 @@ while True:
         continue
     break
 
+#parsing
 bowl = BeautifulSoup(web_page, 'html.parser')
+#finding 
+x = ''
+o = 1
+def find_data():
+    global c
+    global x
+    global o
+    if len(class_name) == 0:
+        for i in bowl.find_all(tag):
+            placeholder = i.text.replace('  ', '').replace('\n', '') 
+            x +=  f"{o}) {placeholder} " + '\n' +  '-' * 36 +'\n'
+            o+=1
+        print(f'{x}')
+        c = False
+    else:
+        for i in bowl.find_all(tag, class_ = class_name):
+            placeholder = i.text.replace('  ', '').replace('\n', '') 
+            x +=  f"{o}) {placeholder} " + '\n' +  '-' * 36 +'\n'
+            o+=1
+        print(f'{x}')
+        c = True
 
-
+# asking 
+def asking():
+    if len(x) == 0:
+        print('No results where found')
+    else:
+        choice = input('Would you like to store this data? ("y"/"n"): ').strip()
+        if choice == 'y':
+            store_data(c)
+        else:
+            print('Exiting in: 5 seconds')
+            time.sleep(5)
+            sys.exit()
+# def stroring 
 def store_data(c):
     file_name = input('Enter a name for the file: ')
     file_path = Path.home()/'desktop'/ file_name
@@ -46,32 +81,6 @@ File Name: "{file_name}.txt"''')
 
 #indx = 0
 # maeke this in to a function
-x = ''
-o = 1
-def poop(i):
-    global x
-    global o
-    placeholder = i.text.replace('  ', '').replace('\n', '') 
-    x +=  f"{o}) {placeholder} " + '\n' +  '-' * 36 +'\n'
-    o+=1
-def find_data():
-    if len(class_name) == 0:
-        for i in bowl.find_all(tag):
-            poop(i)
-        print(f'{x}')
-    else:
-        for i in bowl.find_all(tag, class_ = class_name):
-            poop(i)
+
 find_data()
-
-
-if len(x) == 0:
-    print('No results where found')
-else:
-    choice = input('Would you like to store this data? ("y"/"n"): ').strip()
-    if choice == 'y':
-        store_data(c)
-    else:
-        print('Exiting in: 5 seconds')
-        time.sleep(5)
-        sys.exit()
+asking()
