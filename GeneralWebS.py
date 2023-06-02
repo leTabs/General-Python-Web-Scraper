@@ -1,11 +1,18 @@
+# impoer dependencies 
+
 from bs4 import BeautifulSoup
 from pathlib import Path
 from datetime import datetime
 import requests, time , sys
 
+# introduction to the users
+
 print('----------------------- General Webscraper ----------------------')
 print('Provide the inforamtion requested to extract data from a website.')
 print('-'*65)
+
+
+# the user provides the necessary data 
 
 while True:
     url_address = input('URL Adress           : ').strip()
@@ -25,11 +32,18 @@ while True:
         print('Please, provide a valid HTML tag.')
         continue
     break
-    
+
+
+# parsing the web page declaring the necessary variables
+
 bowl = BeautifulSoup(web_page, 'html.parser')
 scraped_data = ''
 indx = 1
 all_tags = ''
+
+
+# the function that scrapes according to the user's data
+
 def scrape_page():
     global scraped_data
     global indx
@@ -48,7 +62,11 @@ def scrape_page():
             indx += 1
         print(found_data() if scraped_data else no_results())
         all_tags = True
-        
+
+
+
+# the function displays the data for the user and asks if they want to store them
+
 def found_data():
     print(scraped_data)
     choice = input('Would you like to store this data? ("y"/"n"): ').strip().lower()
@@ -56,10 +74,19 @@ def found_data():
         store_data(all_tags)
     else:
         terminate()
+
+
+
+# the function notifies the user that no data were discovered
+
 def no_results():
     print('No result found.')
     terminate()
-    
+
+
+
+# the function that is responsible of the data storing
+
 def store_data(present_class_name):
     file_name = input("Enter the file's name: ").strip()
     file_path = Path.home() / 'desktop' / file_name
@@ -76,10 +103,16 @@ Location : Desktop
 File Name: "{file_name}.txt"''')
     terminate()
 
+
+
+# the function that is responsible of terminating the aplication
+
 def terminate():
     time.sleep(2)
     print('. . . . . '* 8)
     close = input('Type "ENTER" to terminate:')
     sys.exit()
 
+
+# calling the root function
 scrape_page()
