@@ -34,7 +34,7 @@ while True:
     break
 
 
-# parsing the web page declaring the necessary variables
+# parsing the web page & declaring the necessary variables
 
 bowl = BeautifulSoup(web_page, 'html.parser')
 scraped_data = ''
@@ -42,7 +42,7 @@ indx = 1
 all_tags = ''
 
 
-# the function that scrapes according to the user's data
+# the function that scrapes the page according to the user's data
 
 def scrape_page():
     global scraped_data
@@ -68,6 +68,8 @@ def scrape_page():
 # the function displays the data for the user and asks if they want to store them
 
 def found_data():
+    print('-'*25+' Scraped Data '+ '-'*26)
+    print('='*65)
     print(scraped_data)
     choice = input('Would you like to store this data? ("y"/"n"): ').strip().lower()
     if choice == 'y':
