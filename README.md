@@ -10,3 +10,5 @@ All it requires is:
 By providing the above neccessities, the program returns the data in an indexed form.
 It also allows for the option to store the data in files.
 
+Consult the General Web Scraper Documentation for more information:
+https://github.com/leTabs/General-Python-Web-Scraper/blob/main/General%20Web%20Scraper%20Documentation.odt
