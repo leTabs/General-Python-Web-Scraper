@@ -8,3 +8,5 @@ All it requires is:
 3) The name of the tag's class ( Optional )
 
 By providing the above neccessities, the program returns the data in an indexed form.
+It also allows for the option to store the data in files.
+
