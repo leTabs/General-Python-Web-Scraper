@@ -1,5 +1,5 @@
-This is a General Web Scraper made using Python.
-It allows the users with minimum HTML knowledge to scrape data from 
+This is a General Web Scraper, created using Python.
+It allows for users with minimum HTML knowledge, to scrape data from 
 web pages by a very simple and quick process.
 
 All it requires is:
